@@ -1,0 +1,9 @@
+.shed/
+.idea/
+venv/
+
+*.chalice/
+
+*__pycache__/
+*.pyc
+.*secret_names.py
