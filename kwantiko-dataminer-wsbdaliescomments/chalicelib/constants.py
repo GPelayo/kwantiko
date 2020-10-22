@@ -4,6 +4,7 @@ GROUP_NAME = 'portfolio'
 PROJECT_NAME = 'kwantiko'
 
 THREAD_ID_FIELDNAME = 'thread_id'
+DATE_RECORDED_FIELDNAME = 'date_recorded'
 
 
 def build_reddit_threads_monitored_table_name() -> str:

@@ -4,10 +4,12 @@ import boto3
 from chalice import Chalice, Rate
 
 from chalicelib.data_miners import RedditLinkMiner, RedditLinkPublisher
+from chalicelib.monitors import StickyMonitor
 from chalicelib.constants import (build_reddit_thread_queue_arn,
                                   build_reddit_threads_monitored_table_name,
                                   build_reddit_thread_queue_name,
                                   THREAD_ID_FIELDNAME)
+from chalicelib.config import WSB_SUBREDDIT_NAME, WSB_DAILIES_TITLE_PREFIX
 
 app = Chalice(app_name='kwantiko-dataminer-wsbdaliescomments')
 app.log.setLevel(logging.DEBUG)
@@ -32,3 +34,8 @@ def wsb_foreman(event):
     queue = sqs.Queue(build_reddit_thread_queue_arn())
     for item in response['Items']:
         queue.send_message(MessageBody=item[THREAD_ID_FIELDNAME])
+
+
+@app.schedule(Rate(1, Rate.HOURS))
+def wsb_monitor(event):
+    StickyMonitor(WSB_SUBREDDIT_NAME, filter_substring=WSB_DAILIES_TITLE_PREFIX).organize()
