@@ -17,7 +17,7 @@ class RedditLinkMiner(PostMiner):
                                                 post_id,
                                                 SimpleRedditCommentHarmonizer(),
                                                 retrieval_limit=250)
-        # self.filters = [LinkFilter()]
+        self.filters = [LinkFilter()]
         self.formatter = [DiscordFormatter()]
         self.outflows = [DynamoDBPostWriter(post_id)]
 
