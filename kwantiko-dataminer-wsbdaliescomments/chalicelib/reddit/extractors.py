@@ -1,14 +1,9 @@
 from praw.models import MoreComments
-from praw import Reddit
 
 from chalicelib.common.extractors import Extractor
+from chalicelib.reddit import create_reddit_object
 from chalicelib.reddit.harmonizers import RedditCommentHarmonizer
 from chalicelib.secrets import SecretsManager
-from chalicelib.config import (REDDIT_USER_AGENT,
-                               REDDIT_CLIENT_ID,
-                               REDDIT_CLIENT_SECRET,
-                               REDDIT_USERNAME,
-                               REDDIT_PASSWORD)
 
 
 class RedditCommentExtractor(Extractor):
@@ -18,12 +13,8 @@ class RedditCommentExtractor(Extractor):
                  harmonizer: RedditCommentHarmonizer,
                  retrieval_limit: int = 0):
         self.secrets = secrets_manager.secrets
-        reddit = Reddit(user_agent=self.secrets[REDDIT_USER_AGENT],
-                        client_id=self.secrets[REDDIT_CLIENT_ID],
-                        client_secret=self.secrets[REDDIT_CLIENT_SECRET],
-                        username=self.secrets[REDDIT_USERNAME],
-                        password=self.secrets[REDDIT_PASSWORD])
         self.post_id = post_id
+        reddit = create_reddit_object(secrets_manager.secrets)
         self.submission = reddit.submission(id=post_id)
         self.submission.comment_sort = 'new'
         self.date_submission_created = self.submission.created_utc
