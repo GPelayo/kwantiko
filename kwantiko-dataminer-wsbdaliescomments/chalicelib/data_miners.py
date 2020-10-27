@@ -5,7 +5,7 @@ from chalicelib.common.outflows import DynamoDBPostWriter
 from chalicelib.discord.formatter import DiscordFormatter
 from chalicelib.discord.outflows import Messenger as DiscordMessager
 from chalicelib.reddit.extractors import RedditCommentExtractor
-from chalicelib.reddit.harmonizers import SimpleRedditCommentHarmonizer
+from chalicelib.reddit.harmonizers import RedditCommentHarmonizer
 from chalicelib.secrets import AWSSecretsManager
 from chalicelib.config import DISCORD_SECRET_NAME, REDDIT_SECRET_NAME
 
@@ -15,7 +15,7 @@ class RedditLinkMiner(PostMiner):
         super().__init__(*args, **kwargs)
         self.extractor = RedditCommentExtractor(AWSSecretsManager(REDDIT_SECRET_NAME),
                                                 post_id,
-                                                SimpleRedditCommentHarmonizer(),
+                                                RedditCommentHarmonizer(),
                                                 retrieval_limit=250)
         self.filters = [LinkFilter()]
         self.formatter = [DiscordFormatter()]

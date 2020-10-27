@@ -2,6 +2,7 @@ import boto3
 
 from chalicelib.dynamodb import create_dynamodb_table
 from chalicelib.constants import build_reddit_posts_viewed_table_name, build_reddit_posts_table_name, POST_ID_FIELDNAME
+from chalicelib.common.harmonizers import DynamoDBPostHarmonizer
 
 
 class PostDatabaseReader:
@@ -22,5 +23,5 @@ class DynamoDBPostReader(PostDatabaseReader):
         table_response = self.posts_table.scan()
         for item in table_response['Items']:
             if 'Item' not in self.viewed_posts_table.get_item(Key={POST_ID_FIELDNAME: item[POST_ID_FIELDNAME]}).keys():
-                yield item
+                yield DynamoDBPostHarmonizer().serialize(item)
                 self.viewed_posts_table.put_item(Item={POST_ID_FIELDNAME: item[POST_ID_FIELDNAME]})

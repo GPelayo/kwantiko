@@ -2,6 +2,7 @@ from typing import List
 
 from chalicelib.common.database_reader import PostDatabaseReader
 from chalicelib.common.extractors import Extractor
+from chalicelib.common.formatter import Formatter
 from chalicelib.common.filters import Filter
 from chalicelib.common.formatter import Formatter
 from chalicelib.common.outflows import Outflow
@@ -15,19 +16,19 @@ class PostMiner:
         self.formatter = []   # type: List[Formatter]
 
     def process(self):
-        for comment in self.extractor.posts:
+        for post in self.extractor.posts:
             for m in self.formatter:
-                comment = m.format_post(comment)
+                post = m.format_post(post)
             for outflow in self.outflows:
-                if not self.filters or all([f.validate(comment) for f in self.filters]):
-                    outflow.send(comment)
+                if not self.filters or all([f.validate(post) for f in self.filters]):
+                    outflow.send(post)
 
 
 class Publisher:
     def __init__(self, *args, **kwargs):
         self.database_reader = PostDatabaseReader()  # type: PostDatabaseReader
-        self.formatter = []                 # type: List[Formatter]
-        self.messenger = Outflow()          # type: Outflow
+        self.formatter = []                          # type: List[Formatter]
+        self.messenger = Outflow()                   # type: Outflow
 
     def publish_messages(self):
         for post in self.database_reader.post_items:
