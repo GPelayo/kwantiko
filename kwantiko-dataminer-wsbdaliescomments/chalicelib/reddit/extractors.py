@@ -1,6 +1,9 @@
+from typing import Generator
+
 from praw.models import MoreComments
 
 from chalicelib.common.extractors import Extractor
+from chalicelib.common.models import Post
 from chalicelib.reddit import create_reddit_object
 from chalicelib.reddit.harmonizers import RedditCommentHarmonizer
 from chalicelib.secrets import SecretsManager
@@ -23,10 +26,10 @@ class RedditCommentExtractor(Extractor):
         self.retrieval_limit = retrieval_limit
 
     @property
-    def posts(self):
+    def posts(self) -> Generator[Post, None, None]:
         yield from self._read_posts(self.submission.comments)
 
-    def _read_posts(self, comments):
+    def _read_posts(self, comments) -> Generator[Post, None, None]:
         for comment_node in comments:
             if isinstance(comment_node, MoreComments):
                 self._read_posts(comment_node.comments())

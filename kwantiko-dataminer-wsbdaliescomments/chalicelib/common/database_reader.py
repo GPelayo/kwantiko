@@ -1,9 +1,11 @@
+from typing import Generator
+
 import boto3
 
 from chalicelib.dynamodb import create_dynamodb_table
 from chalicelib.constants import build_reddit_posts_viewed_table_name, build_reddit_posts_table_name, POST_ID_FIELDNAME
 from chalicelib.common.harmonizers import DynamoDBPostHarmonizer
-
+from chalicelib.common.models import Post
 
 class PostDatabaseReader:
     @property
@@ -19,7 +21,7 @@ class DynamoDBPostReader(PostDatabaseReader):
                                                         POST_ID_FIELDNAME)
 
     @property
-    def post_items(self):
+    def post_items(self) -> Generator[Post, None, None]:
         table_response = self.posts_table.scan()
         for item in table_response['Items']:
             if 'Item' not in self.viewed_posts_table.get_item(Key={POST_ID_FIELDNAME: item[POST_ID_FIELDNAME]}).keys():
