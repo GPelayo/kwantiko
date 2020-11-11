@@ -1,9 +1,11 @@
 from datetime import datetime
 import time
 
-from kog.config import DISCORD_SECRET_NAME, REDDIT_SECRET_NAME
 from kog.data_miners import WSBLinkMiner
-from kog.aws.secrets import AWSSecretsManager, SecretsManager
+from kog.secrets import SecretsManager
+from kog.aws.secrets import AWSSecretsManager
+
+import config
 
 
 class Task:
@@ -38,10 +40,10 @@ class WSBDailiesTask(Task):
               f'comments and sent dump at {datetime.now()} ')
 
 
-DELAY_IN_SECONDS = 300
+DELAY_IN_SECONDS = 1
 
-discord_sm = AWSSecretsManager(DISCORD_SECRET_NAME).clone()
-reddit_sm = AWSSecretsManager(REDDIT_SECRET_NAME).clone()
+discord_sm = AWSSecretsManager(config.DISCORD_SECRET_NAME).clone()
+reddit_sm = AWSSecretsManager(config.REDDIT_SECRET_NAME).clone()
 tasks = [WSBDailiesTask(discord_sm, reddit_sm)]
 
 if __name__ == '__main__':

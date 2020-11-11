@@ -4,14 +4,15 @@ import json
 import boto3
 from botocore.exceptions import ClientError
 
-from kog import config
+import config
 from kog.secrets import SecretsManager
 
 
 class AWSSecretsManager(SecretsManager):
     def __init__(self, secret_id: str):
         session = boto3.session.Session()
-        client = session.client(service_name='secretsmanager', region_name=config.AWS_REGION)
+        client = session.client(service_name='secretsmanager',
+                                region_name=config.AWS_DEFAULT_REGION)
         try:
             secret_response = client.get_secret_value(SecretId=secret_id)
         except ClientError as e:

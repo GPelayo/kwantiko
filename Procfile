@@ -1,0 +1,1 @@
+worker: python kwantiko_bot.py

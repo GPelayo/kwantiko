@@ -1,15 +1,11 @@
 from praw import Reddit
 
-from kog.config import (REDDIT_USER_AGENT,
-                        REDDIT_CLIENT_ID,
-                        REDDIT_CLIENT_SECRET,
-                        REDDIT_USERNAME,
-                        REDDIT_PASSWORD)
+import config
 
 
 def create_reddit_object(secrets: dict) -> Reddit:
-    return Reddit(user_agent=secrets[REDDIT_USER_AGENT],
-                  client_id=secrets[REDDIT_CLIENT_ID],
-                  client_secret=secrets[REDDIT_CLIENT_SECRET],
-                  username=secrets[REDDIT_USERNAME],
-                  password=secrets[REDDIT_PASSWORD])
+    return Reddit(user_agent=secrets[config.REDDIT_USER_AGENT],
+                  client_id=secrets[config.REDDIT_CLIENT_ID],
+                  client_secret=secrets[config.REDDIT_CLIENT_SECRET],
+                  username=secrets[config.REDDIT_USERNAME],
+                  password=secrets[config.REDDIT_PASSWORD])
