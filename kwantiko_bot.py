@@ -40,8 +40,6 @@ class WSBDailiesTask(Task):
               f'comments and sent dump at {datetime.now()} ')
 
 
-DELAY_IN_SECONDS = 1
-
 discord_sm = AWSSecretsManager(config.DISCORD_SECRET_NAME).clone()
 reddit_sm = AWSSecretsManager(config.REDDIT_SECRET_NAME).clone()
 tasks = [WSBDailiesTask(discord_sm, reddit_sm)]
@@ -50,4 +48,4 @@ if __name__ == '__main__':
     while True:
         for task in tasks:
             task.run()
-        time.sleep(DELAY_IN_SECONDS)
+        time.sleep(int(config.DELAY_IN_SECONDS))
