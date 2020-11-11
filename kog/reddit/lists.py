@@ -1,7 +1,7 @@
 from praw.models import Submission
 from typing import Generator
-from chalicelib.reddit import create_reddit_object
-from chalicelib.secrets import AWSSecretsManager
+from kog.reddit import create_reddit_object
+from kog.aws.secrets import AWSSecretsManager
 
 MAX_STICKIES = 2
 

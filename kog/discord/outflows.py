@@ -1,8 +1,8 @@
 import discord
-from chalicelib.common.models import Post
-from chalicelib.common.outflows import Outflow
-from chalicelib.secrets import AWSSecretsManager
-from chalicelib.config import DISCORD_WEBHOOK_ID_NAME, DISCORD_WEBHOOK_TOKEN_NAME
+from kog.common.models import Post
+from kog.common import Outflow
+from kog.aws.secrets import AWSSecretsManager
+from kog.config import DISCORD_WEBHOOK_ID_NAME, DISCORD_WEBHOOK_TOKEN_NAME
 
 
 class Messenger(Outflow):
@@ -13,4 +13,4 @@ class Messenger(Outflow):
         self.webhook = discord.Webhook.partial(webhook_id, webhook_token, adapter=discord.RequestsWebhookAdapter())
 
     def send(self, post: Post):
-        self.webhook.send(post.message)
+        self.webhook.send(f'________\n{post.message}')

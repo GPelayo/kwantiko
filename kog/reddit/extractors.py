@@ -1,12 +1,12 @@
 from typing import Generator
 
-from praw.models import MoreComments
+from praw.models import MoreComments, Comment
 
-from chalicelib.common.extractors import Extractor
-from chalicelib.common.models import Post
-from chalicelib.reddit import create_reddit_object
-from chalicelib.reddit.harmonizers import RedditCommentHarmonizer
-from chalicelib.secrets import SecretsManager
+from kog.common.extractors import Extractor
+from kog.common.models import Post
+from kog.reddit import create_reddit_object
+from kog.reddit.harmonizers import RedditCommentHarmonizer
+from kog.secrets import SecretsManager
 
 
 class RedditCommentExtractor(Extractor):
@@ -14,7 +14,7 @@ class RedditCommentExtractor(Extractor):
                  secrets_manager: SecretsManager,
                  post_id: str,
                  harmonizer: RedditCommentHarmonizer,
-                 retrieval_limit: int = 0):
+                 retrieval_limit: int = 10):
         self.secrets = secrets_manager.secrets
         self.post_id = post_id
         reddit = create_reddit_object(secrets_manager.secrets)
@@ -27,15 +27,17 @@ class RedditCommentExtractor(Extractor):
 
     @property
     def posts(self) -> Generator[Post, None, None]:
-        yield from self._read_posts(self.submission.comments)
+        self.comments_read = 0
+        for post in self._read_posts(self.submission.comments):
+            yield post
+            self.comments_read += 1
+            if self.retrieval_limit < self.comments_read:
+                break
 
     def _read_posts(self, comments) -> Generator[Post, None, None]:
         for comment_node in comments:
             if isinstance(comment_node, MoreComments):
                 self._read_posts(comment_node.comments())
-            else:
+            elif isinstance(comment_node, Comment):
                 serialized_comment = self.harmonizer.serialize(comment_node)
                 yield serialized_comment
-                self.comments_read += 1
-                if self.retrieval_limit < self.comments_read:
-                    break

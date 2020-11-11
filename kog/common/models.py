@@ -4,3 +4,4 @@ class Post:
     user = None            # type: str
     message = None         # type: str
     sentiment = None       # type: float
+    url = None

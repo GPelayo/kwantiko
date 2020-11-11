@@ -1,5 +1,5 @@
-from chalicelib.common.formatter import Formatter
-from chalicelib.common.models import Post
+from kog.common.formatter import Formatter
+from kog.common.models import Post
 
 
 class DiscordFormatter(Formatter):

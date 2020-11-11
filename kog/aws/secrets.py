@@ -1,21 +1,17 @@
 import base64
 import json
-from typing import Dict
 
 import boto3
 from botocore.exceptions import ClientError
 
-from chalicelib import constants
-
-
-class SecretsManager:
-    secrets = None  # type: Dict[str]
+from kog import config
+from kog.secrets import SecretsManager
 
 
 class AWSSecretsManager(SecretsManager):
     def __init__(self, secret_id: str):
         session = boto3.session.Session()
-        client = session.client(service_name='secretsmanager', region_name=constants.AWS_REGION)
+        client = session.client(service_name='secretsmanager', region_name=config.AWS_REGION)
         try:
             secret_response = client.get_secret_value(SecretId=secret_id)
         except ClientError as e:
@@ -26,3 +22,4 @@ class AWSSecretsManager(SecretsManager):
             else:
                 raw_secrets = base64.b64decode(secret_response['SecretBinary'])
             self.secrets = json.loads(raw_secrets)
+        pass

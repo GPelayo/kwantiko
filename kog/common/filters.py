@@ -1,4 +1,4 @@
-from chalicelib.common.models import Post
+from kog.common.models import Post
 
 
 class Filter:

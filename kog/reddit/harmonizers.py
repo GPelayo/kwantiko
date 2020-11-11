@@ -1,7 +1,7 @@
 from praw.models import Comment
 
-from chalicelib.common.harmonizers import Harmonizer
-from chalicelib.common.models import Post
+from kog.common.harmonizers import Harmonizer
+from kog.common.models import Post
 
 
 class RedditCommentHarmonizer(Harmonizer):
@@ -12,4 +12,6 @@ class RedditCommentHarmonizer(Harmonizer):
         post.user = comment.author.name if comment.author else '[deleted]'
         post.message = comment.body
         post.sentiment = comment.score
+        post.url = comment.permalink
+        post.payload = comment
         return post
