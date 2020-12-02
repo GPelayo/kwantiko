@@ -3,9 +3,9 @@ from praw import Reddit
 import config
 
 
-def create_reddit_object(secrets: dict) -> Reddit:
-    return Reddit(user_agent=secrets[config.REDDIT_USER_AGENT],
-                  client_id=secrets[config.REDDIT_CLIENT_ID],
-                  client_secret=secrets[config.REDDIT_CLIENT_SECRET],
-                  username=secrets[config.REDDIT_USERNAME],
-                  password=secrets[config.REDDIT_PASSWORD])
+def create_reddit_object() -> Reddit:
+    return Reddit(user_agent=config.REDDIT_USER_AGENT,
+                  client_id=config.REDDIT_CLIENT_ID,
+                  client_secret=config.REDDIT_CLIENT_SECRET,
+                  username=config.REDDIT_USERNAME,
+                  password=config.REDDIT_PASSWORD)

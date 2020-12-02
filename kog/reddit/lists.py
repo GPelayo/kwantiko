@@ -1,14 +1,13 @@
 from praw.models import Submission
 from typing import Generator, Optional
 from kog.reddit import create_reddit_object
-from kog.aws.secrets import AWSSecretsManager
 
 MAX_STICKIES = 2
 
 
 class SubredditStickies:
-    def __init__(self, subreddit_name: str, secrets_manager: AWSSecretsManager, filter_substring: Optional[str] = ''):
-        self.reddit = create_reddit_object(secrets_manager.secrets)
+    def __init__(self, subreddit_name: str, filter_substring: Optional[str] = ''):
+        self.reddit = create_reddit_object()
         self.subreddit_name = subreddit_name
         self.filter_substring = filter_substring
 

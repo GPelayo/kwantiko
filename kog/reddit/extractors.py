@@ -6,18 +6,15 @@ from kog.common.extractors import Extractor
 from kog.common.models import Post
 from kog.reddit import create_reddit_object
 from kog.reddit.harmonizers import RedditCommentHarmonizer
-from kog.secrets import SecretsManager
 
 
 class RedditCommentExtractor(Extractor):
     def __init__(self,
-                 secrets_manager: SecretsManager,
                  post_id: str,
                  harmonizer: RedditCommentHarmonizer,
                  retrieval_limit: int = 10):
-        self.secrets = secrets_manager.secrets
         self.post_id = post_id
-        reddit = create_reddit_object(secrets_manager.secrets)
+        reddit = create_reddit_object()
         self.submission = reddit.submission(id=post_id)
         self.submission.comment_sort = 'new'
         self.date_submission_created = self.submission.created_utc
